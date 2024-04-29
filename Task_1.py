@@ -5,23 +5,31 @@ import argparse
 
 
 def calculate_agreement(population, row, col, external=0.0):
-    '''
+    """
     This function should return the extent to which a cell agrees with its neighbours.
-    Inputs: population (numpy array)
-            row (int)
-            col (int)
-            external (float)
+    Inputs: population (numpy array),
+    		row (int)
+    		col (int)
+    		external (float)
     Returns:
-            change_in_agreement (float)
-    '''
+    		change_in_agreement (float).
+    """
     n_rows, n_cols = population.shape
-    #
-    change_in_agreement = external * population[row, col]
-    # Checking neighbours in all four directions
-    for d_row, d_col in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-        n_row, n_col = row + d_row, col + d_col
-        if 0 <= n_row < n_rows and 0 <= n_col < n_cols:
-            change_in_agreement += population[n_row, n_col] * population[row, col]
+    # Opinion
+    current_cell_state = population[row, col]
+    # Start with the influence of external factor
+    change_in_agreement = external * current_cell_state
+
+    # Define neighbor offsets for four directions: up, down, left, right
+    neighbor_offsets = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+    # Calculate agreement with neighbors
+    for d_row, d_col in neighbor_offsets:
+        neighbor_row, neighbor_col = row + d_row, col + d_col
+        if 0 <= neighbor_row < n_rows and 0 <= neighbor_col < n_cols:
+            neighbor_state = population[neighbor_row, neighbor_col]
+            change_in_agreement += neighbor_state * current_cell_state
+
     return change_in_agreement
 
 def ising_step(population, alpha=1.0, external=0.0):
