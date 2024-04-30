@@ -251,6 +251,32 @@ def test_networks():
 
     print("All tests passed")
 
-
+def main():
+    parser = argparse.ArgumentParser(description="Generate and analyse networks")
+    parser.add_argument("-network",  type=int, help="Generate and analyze a random network of the specified size")
+    parser.add_argument("-test_network",action="store_true", help="Run test functions for network metrics")
+    
+    args = parser.parse_args()
+    print(args.network)
+    print(args.test_network)
+    
+    if args.network:
+        network = Network()
+        network.make_random_network(10, 0.5)
+        
+        mean_degree = network.get_mean_degree()
+        mean_clustering = network.get_mean_clustering()
+        mean_path_length = network.get_mean_path_length()
+        
+        print("Mean degree: ", mean_degree)
+        print("Average path length: ", mean_path_length)
+        print("Clustering co-efficient: ", mean_clustering)
+        
+        network.plot()
+        plt.show()
+    
+    elif args.test_network:
+        test_networks()
+        
 if __name__ == "__main__":
     test_networks()
