@@ -18,7 +18,7 @@ class Node:
         Neighbours is a numpy array representing the row of the adjacency matrix that corresponds to the node
         '''
         return np.where(np.array(self.connections)==1)[0]
-        
+
 class Network:
 
     def __init__(self, nodes=None):
@@ -72,19 +72,26 @@ class Network:
         return mean_clustering_coefficient
     
     def floyds_algo(self):
-        
+        '''
+        Use Floyd-Warshall algorithm to  find the path length
+        '''
+        #Number of nodes
         num_nodes = len(self.nodes)
         
         #INF represents infinity, which is used to denote unreachable vertices
         INF = float('inf')
         
+        #Length of each path
+        path_length = np.zeros((num_nodes, num_nodes))
+        
+        #Set the range for path length
         for i in range(num_nodes):
             for j in range(num_nodes):
                 if i!=j:
-                    path_length = INF
+                    path_length[i][j] = INF
                 
                 else:
-                    path_length = 0
+                    path_length[i][j] = 0
         
         #Initialise distance to direct edges
         for node in self.nodes:
@@ -102,11 +109,19 @@ class Network:
         return path_length
         
     def get_mean_path_length(self):
+        '''
+        Calculate the mean path length
+        (average of the distance between two nodes)
+        '''
         num_nodes = len(self.nodes)
+        #Initialise path length
         total_path_length = 0
         num_paths = 0
         
-        path_dist = self.floyds_algo(self.nodes)
+        #INF represents infinity, which is used to denote unreachable vertices
+        INF = float('inf')
+        
+        path_dist = self.floyds_algo()
         
         for i in range(num_nodes):
             for j in range(num_nodes):
@@ -117,8 +132,10 @@ class Network:
         if num_paths==0:
             return INF
         
+        #Calculate the average path length
         average_path_length = total_path_length/num_paths
         
+        #Round the average path length to 15 d.p
         return(average_path_length, 15)
 
 
@@ -243,4 +260,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
