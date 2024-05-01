@@ -18,22 +18,7 @@ class Node:
         Neighbours is a numpy array representing the row of the adjacency matrix that corresponds to the node
         '''
         return np.where(np.array(self.connections)==1)[0]
-
-class Queue:
-    def __init__(self):
-        self.queue = []
-
-    def push(self, item):
-        self.queue.append(item)
-
-    def pop(self):
-        if self.is_empty():
-            return None
-        return self.queue.pop(0)
-
-    def is_empty(self):
-        return len(self.queue) == 0
-
+        
 class Network:
 
     def __init__(self, nodes=None):
@@ -48,8 +33,9 @@ class Network:
         '''
         Calculate the mean degree of the network
         '''
-        #Loop through each nodes in the network
+        #Loop through each nodes in the network and calculate the sum of the degree of each nodes
         total_degree = sum(sum(node.connections) for node in self.nodes)
+        #Calculate the mean degree of the nodes in the network
         mean_degree = total_degree/ len(self.nodes)
         return mean_degree
 
@@ -58,7 +44,7 @@ class Network:
         Calculate the mean clustering co-efficient
         (the fraction of a node's neighbours forming a triangle that includes the original node)
         '''
-        #List of the clustering coefficient of each nodes
+        #Empty list of the clustering coefficient of each nodes
         clustering_coefficient = []
 
         #Loop through each nodes
@@ -72,94 +58,70 @@ class Network:
             #Formula for the number of possible triangles that can be formed
             possible_triangles = num_neighbours * (num_neighbours-1) / 2
 
+            #Loop through each neighbour of the nodes to find the number of nodes connected to the node
             connected_nodes = sum(node.connections[neighbour] for neighbour in neighbours)
+            
+            #clustering coefficient for each nodes
             triangle = int(possible_triangles/ connected_nodes)
 
+            #Add clustering coefficient of each node in the clustering_coefficient empty list above
             clustering_coefficient.append(triangle)
-                
+        
+        #Calculate the average clustering coefficient of the whole network
         mean_clustering_coefficient = np.mean(clustering_coefficient)
         return mean_clustering_coefficient
-
-    # def bfs(self, start_node, goal):
-    #     start_node = self.graph[0]
-    #     print("start:", start_node)
-    #     goal = self.nodes[-1]
-    #     print("goal: ", goal)
-    #     search_queue = Queue()
-    #     search_queue.push(start_node)
-    #     visited = []
+    
+    def floyds_algo(self):
         
-    #     while not search_queue.is_empty():
-    #         #Pop the next node from the Queue
-    #         node_to_check = search_queue.pop()
-    #         #If we are at the goal, then we are finished.
-    #         if node_to_check == goal:
-    #             break
-            
-    #         for neighbour_index in node_to_check.get_neighbours():
-    #             #Get a node based on the index
-    #             neighbour = self.nodes[neighbour_index]
-    #             if neighbour_index not in visited:
-    #                 search_queue.push(neighbour)
-    #                 visited.append(neighbour_index)
-    #                 neighbour.parent = node_to_check
-                 
-    #     node_to_check = goal
-    #     start_node.parent = None
-    #     route = []
-    #     while node_to_check.parent:
-    #         route.append(node_to_check)
-    #         node_to_check = node_to_check.parent
+        num_nodes = len(self.nodes)
         
-    #     route.append(node_to_check)
-    def bfs(self, start_node, goal):
-        search_queue = Queue()
-        search_queue.push(start_node)
-        visited = set()
-        visited.add(start_node)  # Mark the start node as visited
-        distance = {start_node: 0}  # Initialize the distance dictionary with the start node
-                 
-        while not search_queue.is_empty():
-            node_to_check = search_queue.pop()
-            if node_to_check == goal:
-                return distance[node_to_check]
-            
-            for neighbour_index in node_to_check.get_neighbours():
-                neighbour = self.nodes[neighbour_index]
-                if neighbour not in visited:
-                    visited.add(neighbour)
-                    distance[neighbour] = distance[node_to_check] + 1  # Update the distance for the neighbour
-                    search_queue.push(neighbour)
-                    
-        return distance
+        #INF represents infinity, which is used to denote unreachable vertices
+        INF = float('inf')
+        
+        for i in range(num_nodes):
+            for j in range(num_nodes):
+                if i!=j:
+                    path_length = INF
                 
-    def get_mean_path_length(self):
-        '''
-        Calculate the mean path length
-        (average of the distance between two nodes)
-        '''
-        total_path_length = 0
-        num_pairs = 0
+                else:
+                    path_length = 0
         
+        #Initialise distance to direct edges
         for node in self.nodes:
-            neighbours = node.get_neighbours()
-            print("Node:", node.index)
-            print("neighbours: ", neighbours)
-            for neighbour_index in neighbours:
-                print("index:", neighbour_index)
-                path_length = self.bfs(node, self.nodes[neighbour_index])
-                print("PL:", path_length)
-                if path_length is not None:
-                    total_path_length += path_length
-                    print("TPL:", total_path_length)
-                    num_pairs += 1
-                    print("Num Pairs: ", num_pairs)
-                    
-        if num_pairs == 0:
-            return 0  # No pairs of nodes found, return 0 as mean path length
-        else:
-            return total_path_length / num_pairs
+            for neighbour_index, connected in enumerate(node.connections):
+                if connected:
+                    path_length[node.index][neighbour_index] = 1
         
+        #Update distance matrix
+        for k in range(num_nodes):
+            for i in range(num_nodes):
+                for j in range(num_nodes):
+                    if path_length[i][k] + path_length[k][j] < path_length[i][j]:
+                        path_length[i][j] = path_length[i][k] + path_length[k][j]
+        
+        return path_length
+        
+    def get_mean_path_length(self):
+        num_nodes = len(self.nodes)
+        total_path_length = 0
+        num_paths = 0
+        
+        path_dist = self.floyds_algo(self.nodes)
+        
+        for i in range(num_nodes):
+            for j in range(num_nodes):
+                if i!=j and path_dist[i][j]!=INF:
+                    total_path_length+=path_dist[i][j]
+                    num_paths +=1
+                    
+        if num_paths==0:
+            return INF
+        
+        average_path_length = total_path_length/num_paths
+        
+        return(average_path_length, 15)
+
+
     def make_random_network(self, N, connection_probability):
         '''
         This function makes a *random* network of size N.
@@ -278,6 +240,7 @@ def main():
     
     elif args.test_network:
         test_networks()
-        
+
 if __name__ == "__main__":
-    test_networks()
+    main()
+
