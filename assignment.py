@@ -55,22 +55,27 @@ class Network:
             #Number of neighbour
             num_neighbours = len(neighbours)
             
+            #Skip nodes with fewer than 2 neighbours
+            if num_neighbours < 2:
+                continue
+            
+            num_triangles = 0
+            
+            for i in range(num_neighbours):
+                for j in range(i+1, num_neighbours):
+                    if self.nodes[neighbours[i]]. connections[neighbours[j]] == 1:
+                        num_triangles += 1
+            
             #Formula for the number of possible triangles that can be formed
             possible_triangles = num_neighbours * (num_neighbours-1) / 2
-
-            #Loop through each neighbour of the nodes to find the number of nodes connected to the node
-            connected_nodes = sum(node.connections[neighbour] for neighbour in neighbours)
             
-            #clustering coefficient for each nodes
-            triangle = int(possible_triangles/ connected_nodes)
-
-            #Add clustering coefficient of each node in the clustering_coefficient empty list above
-            clustering_coefficient.append(triangle)
+            node_cluster = num_triangles/possible_triangles
+            clustering_coefficient.append(node_cluster)
+            
+        mean_clustering_coefficient = sum(clustering_coefficient) / len(self.nodes)
         
-        #Calculate the average clustering coefficient of the whole network
-        mean_clustering_coefficient = np.mean(clustering_coefficient)
         return mean_clustering_coefficient
-    
+
     def floyds_algo(self):
         '''
         Use Floyd-Warshall algorithm to  find the path length
@@ -136,7 +141,7 @@ class Network:
         average_path_length = total_path_length/num_paths
         
         #Round the average path length to 15 d.p
-        return(average_path_length, 15)
+        return(round(average_path_length, 15))
 
 
     def make_random_network(self, N, connection_probability):
@@ -260,5 +265,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
