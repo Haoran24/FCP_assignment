@@ -459,8 +459,8 @@ def main():
     parser.add_argument('-alpha', type=float, default=1.0, help='Specify the alpha value, controlling the impact of agreement on flipping probability')
     parser.add_argument('-test_ising', action='store_true', help='Run the test functions for the Ising model')
     parser.add_argument('-defuant', action='store_true', help='Run the Deffuant model with default or specified parameters')
-    parser.add_argument('-beta', type=float, help='Set the beta value for the model')
-    parser.add_argument('-threshold', type=float, help='Set the threshold value for the model')
+    parser.add_argument('-beta', type=float, default=0.2, help='Set the beta value for the model')
+    parser.add_argument('-threshold', type=float, default=0.2, help='Set the threshold value for the model')
     parser.add_argument('-test_defuant', action='store_true', help='Run the test functions for the Deffuant model')
 
     # Arguments for network simulations
