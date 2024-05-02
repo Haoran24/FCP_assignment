@@ -3,6 +3,7 @@ Github Repo:
  https://github.com/Haoran24/FCP_assignment
 
 -- Task_1-4 in the assignment.py
+  (Check specific task at Github branches)
 -- Task_5 in the Task_5.py
 
 
