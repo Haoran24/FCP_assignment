@@ -72,7 +72,7 @@ def plot_network(network, ax_network, mean_opinions, ax_opinion, t):
     ax_opinion.set_ylabel('Mean Opinion')
     ax_opinion.grid(True)
 
-    plt.pause(0.1)
+    plt.pause(0.01)
 
 def run_simulation(size, beta, threshold, max_time, rewire_prob):
     # Setup and execute the simulation
@@ -83,7 +83,7 @@ def run_simulation(size, beta, threshold, max_time, rewire_prob):
     for t in range(max_time):
         network.update_opinions(beta, threshold)
         mean_opinions.append(np.mean(network.get_opinions()))
-        if t % 5 == 0:
+        if t % 1 == 0:
             plot_network(network, ax_network, mean_opinions, ax_opinion, t)
     plt.show()
 
@@ -95,7 +95,7 @@ def main():
     parser.add_argument('-beta', type=float, default=0.3, help='Convergence parameter')
     parser.add_argument('-threshold', type=float, default=0.1, help='Threshold for influence')
     parser.add_argument('-max_time', type=int, default=100, help='Number of steps to run the simulation')
-    parser.add_argument('-rewire_prob', type=float, default=0.1, help='Probability of rewiring in the small-world network')
+    parser.add_argument('-rewire_prob', type=float, default=0.2, help='Probability of rewiring in the small-world network')
 
     args = parser.parse_args()
 
