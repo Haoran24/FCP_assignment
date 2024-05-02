@@ -95,7 +95,7 @@ def main():
     parser.add_argument('-beta', type=float, default=0.3, help='Convergence parameter')
     parser.add_argument('-threshold', type=float, default=0.1, help='Threshold for influence')
     parser.add_argument('-max_time', type=int, default=100, help='Number of steps to run the simulation')
-    parser.add_argument('-rewire_prob', type=float, default=0.1, help='Probability of rewiring in the small-world network')
+    parser.add_argument('-rewire_prob', type=float, default=0.2, help='Probability of rewiring in the small-world network')
 
     args = parser.parse_args()
 
