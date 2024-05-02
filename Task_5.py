@@ -72,7 +72,7 @@ def plot_network(network, ax_network, mean_opinions, ax_opinion, t):
     ax_opinion.set_ylabel('Mean Opinion')
     ax_opinion.grid(True)
 
-    plt.pause(0.1)
+    plt.pause(0.01)
 
 def run_simulation(size, beta, threshold, max_time, rewire_prob):
     # Setup and execute the simulation
@@ -83,7 +83,7 @@ def run_simulation(size, beta, threshold, max_time, rewire_prob):
     for t in range(max_time):
         network.update_opinions(beta, threshold)
         mean_opinions.append(np.mean(network.get_opinions()))
-        if t % 5 == 0:
+        if t % 1 == 0:
             plot_network(network, ax_network, mean_opinions, ax_opinion, t)
     plt.show()
 
