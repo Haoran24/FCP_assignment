@@ -1,20 +1,23 @@
 # FCP_assginment
 FCP_final_assignment
 
-Requirements:
-Install numpy
-Install matplotlib
-Install argparse
+Installation
+NumPy library
+Matplotlib library
+Ensure you have the required libraries installed using pip: pip install numpy matplotlib
+Argparse
 
-Go to the GitHub Repository Link below
+Overview:
+This Python program creates a random plot of network and caluclate three parameters which are the mean degree, mean path length and mean clustering co-efficient
 
-GitHub Repository Link:
-https://github.com/Haoran24/FCP_assignment.git
-
-Click on the branch button and choose Task-3
-
-Click on the assignment.py and open it in a text editor such as Pycharm or VS studio code
-
-Run code in terminal by typing
+Usage:
+To run the simulation with default parameters, execute the script:
 $ python3 assignment.py -network 10
+
+To run the test functions to verify the correctness of the implementation:
 $ python3 assignment.py -test_network
+
+Output:
+The program outputs the following plots:
+
+Dot line diagram: shows the network image of the random network formed
