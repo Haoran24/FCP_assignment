@@ -21,14 +21,14 @@ Argparse
 
 Usage：
 To run the simulation with default parameters, execute:
-$ python assignment.py --ising-model
+$ python assignment.py -ising-model
 
 To include external influence or adjust the tolerance level (alpha):
-$ python assignment.py --ising-model --external -0.1
-$ python assignment.py --ising-model --alpha 10
+$ python assignment.py -ising_model -external -0.1
+$ python assignment.py -ising_model -alpha 10
 
 To run the test functions to verify the correctness of the implementation:
-$ python assignment.py --test-ising
+$ python assignment.py -test_ising
 
 Model Parameters:
 Alpha (α): Controls the tolerance level for disagreement. A higher alpha means lower tolerance, reducing the likelihood of opinion change.
